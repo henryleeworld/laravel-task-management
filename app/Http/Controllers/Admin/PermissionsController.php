@@ -45,7 +45,7 @@ class PermissionsController extends Controller
 
     public function update(UpdatePermissionRequest $request, Permission $permission)
     {
-        $permission->update($request->all());
+        $permission->update($request->except(['_method', '_token']));
 
         return redirect()->route('admin.permissions.index');
     }

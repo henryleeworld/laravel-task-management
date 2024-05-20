@@ -18,7 +18,7 @@ class RolesController extends Controller
     {
         abort_if(Gate::denies('role_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $roles = Role::all();
+        $roles = Role::with('permissions')->get();
 
         return view('admin.roles.index', compact('roles'));
     }
@@ -53,7 +53,7 @@ class RolesController extends Controller
 
     public function update(UpdateRoleRequest $request, Role $role)
     {
-        $role->update($request->all());
+        $role->update($request->except(['_method', '_token', 'permissions']));
         $role->permissions()->sync($request->input('permissions', []));
 
         return redirect()->route('admin.roles.index');

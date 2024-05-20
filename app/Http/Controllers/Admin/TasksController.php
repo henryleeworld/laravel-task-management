@@ -31,7 +31,7 @@ class TasksController extends Controller
 
     public function store(StoreTaskRequest $request)
     {
-        $task = Task::create($request->all());
+        $task = Task::create($request->except('_token'));
 
         return redirect()->route('admin.tasks.index');
     }
@@ -47,7 +47,7 @@ class TasksController extends Controller
 
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        $task->update($request->all());
+        $task->update($request->except(['_method', '_token']));
 
         return redirect()->route('admin.tasks.index');
     }

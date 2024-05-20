@@ -18,7 +18,7 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $users = User::all();
+        $users = User::with('roles')->get();
 
         return view('admin.users.index', compact('users'));
     }
@@ -53,7 +53,7 @@ class UsersController extends Controller
 
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user->update($request->all());
+        $user->update($request->except(['_method', '_token', 'roles']));
         $user->roles()->sync($request->input('roles', []));
 
         return redirect()->route('admin.users.index');
